@@ -110,14 +110,7 @@ export default function MedIQPlatform() {
             />
           );
         case "3d-body":
-          return (
-            <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
-              <ambientLight intensity={0.5} />
-              <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-              <pointLight position={[-10, -10, -10]} />
-              <HumanBodyVisualization />
-            </Canvas>
-          );
+          return <HumanBodyVisualization />;
         case "records":
           return <MedicalRecords onNavigate={setViewMode} />;
         case "knowledge":
@@ -330,7 +323,6 @@ export default function MedIQPlatform() {
         </div>
       </div>
 
-      {/* Mobile overlay */}
       {sidebarOpen && (
         <motion.div
           initial={{ opacity: 0 }}

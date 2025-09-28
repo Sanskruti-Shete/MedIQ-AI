@@ -2,8 +2,6 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-/* Removed problematic tw-animate-css import that was causing LightningCSS failure */
-
 @theme inline {
   --font-sans: var(--font-source-sans);
   --font-serif: var(--font-poppins);

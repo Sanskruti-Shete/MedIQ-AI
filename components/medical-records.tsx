@@ -203,7 +203,6 @@ export function MedicalRecords({ onNavigate }: MedicalRecordsProps) {
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-slate-800 font-serif">
@@ -474,7 +473,6 @@ export function MedicalRecords({ onNavigate }: MedicalRecordsProps) {
         </div>
       </div>
 
-      {/* Filters and Search */}
       <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
         <div className="flex items-center gap-4 w-full md:w-auto">
           <div className="relative flex-1 md:w-80">
@@ -510,7 +508,6 @@ export function MedicalRecords({ onNavigate }: MedicalRecordsProps) {
         </Button>
       </div>
 
-      {/* Records Grid */}
       <div className="grid gap-4">
         <AnimatePresence>
           {filteredRecords.map((record, index) => {
@@ -693,7 +690,6 @@ export function MedicalRecords({ onNavigate }: MedicalRecordsProps) {
         </div>
       )}
 
-      {/* Record Detail Modal */}
       <Dialog
         open={!!selectedRecord}
         onOpenChange={() => setSelectedRecord(null)}

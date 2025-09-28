@@ -75,7 +75,6 @@ export function PatientDashboard({ onNavigate }: PatientDashboardProps) {
   const [healthScore, setHealthScore] = useState(0);
 
   useEffect(() => {
-    // Animate health score
     const timer = setTimeout(() => setHealthScore(85), 500);
     return () => clearTimeout(timer);
   }, []);
@@ -147,7 +146,6 @@ export function PatientDashboard({ onNavigate }: PatientDashboardProps) {
 
   return (
     <div className="min-h-screen p-6 space-y-6">
-      {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -161,7 +159,6 @@ export function PatientDashboard({ onNavigate }: PatientDashboardProps) {
         </p>
       </motion.div>
 
-      {/* Health Score and Quick Stats */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -252,7 +249,6 @@ export function PatientDashboard({ onNavigate }: PatientDashboardProps) {
         </motion.div>
       </div>
 
-      {/* Quick Actions */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -284,7 +280,6 @@ export function PatientDashboard({ onNavigate }: PatientDashboardProps) {
         </div>
       </motion.div>
 
-      {/* Health Analytics Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -368,7 +363,6 @@ export function PatientDashboard({ onNavigate }: PatientDashboardProps) {
         </motion.div>
       </div>
 
-      {/* Activity and Personal Information */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -473,7 +467,6 @@ export function PatientDashboard({ onNavigate }: PatientDashboardProps) {
                 </div>
               </div>
 
-              {/* Medical Information */}
               {(currentPatient.allergies?.length ||
                 currentPatient.chronic_conditions?.length ||
                 currentPatient.current_medications?.length) && (
@@ -553,7 +546,6 @@ export function PatientDashboard({ onNavigate }: PatientDashboardProps) {
                 </div>
               )}
 
-              {/* Emergency Contact */}
               {currentPatient.emergency_contact_name && (
                 <div className="pt-4 border-t border-emerald-200/50">
                   <div className="flex items-center gap-2 mb-2">

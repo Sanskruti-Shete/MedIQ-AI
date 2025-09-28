@@ -5,8 +5,15 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
+    "dev:nlp": "cd nlp && python app.py",
+    "dev:full": "concurrently \"yarn dev:nlp\" \"yarn dev\"",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "start:nlp": "cd nlp && python app.py",
+    "setup:nlp": "cd nlp && python -m pip install -r requirements.txt",
+    "check:nlp": "cd nlp && python -c \"import requests; print('✅ NLP Backend:', requests.get('http://localhost:8000/api/health').json())\"",
+    "install:full": "yarn install && yarn setup:nlp",
+    "health": "yarn check:nlp"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",
@@ -82,6 +89,8 @@
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "^0.180.0",
+    "concurrently": "^8.2.2",
     "postcss": "^8.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"

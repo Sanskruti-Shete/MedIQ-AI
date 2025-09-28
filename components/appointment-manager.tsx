@@ -1,16 +1,40 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Calendar, Clock, User, Phone, Video, MapPin, Plus, Edit, Trash2, CheckCircle, AlertCircle } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import type React from "react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Calendar,
+  Clock,
+  User,
+  Phone,
+  Video,
+  MapPin,
+  Plus,
+  Edit,
+  Trash2,
+  CheckCircle,
+  AlertCircle,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -18,24 +42,28 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "@/components/ui/dialog";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Appointment {
-  id: string
-  patientName: string
-  patientEmail: string
-  patientPhone: string
-  appointmentType: "consultation" | "follow-up" | "emergency" | "routine-checkup"
-  consultationMode: "in-person" | "video" | "phone"
-  date: string
-  time: string
-  duration: number
-  status: "scheduled" | "confirmed" | "completed" | "cancelled" | "no-show"
-  symptoms: string
-  notes: string
-  urgency: "low" | "medium" | "high" | "critical"
-  createdAt: string
+  id: string;
+  patientName: string;
+  patientEmail: string;
+  patientPhone: string;
+  appointmentType:
+    | "consultation"
+    | "follow-up"
+    | "emergency"
+    | "routine-checkup";
+  consultationMode: "in-person" | "video" | "phone";
+  date: string;
+  time: string;
+  duration: number;
+  status: "scheduled" | "confirmed" | "completed" | "cancelled" | "no-show";
+  symptoms: string;
+  notes: string;
+  urgency: "low" | "medium" | "high" | "critical";
+  createdAt: string;
 }
 
 const mockAppointments: Appointment[] = [
@@ -71,78 +99,88 @@ const mockAppointments: Appointment[] = [
     urgency: "low",
     createdAt: "2024-01-08T14:30:00Z",
   },
-]
+];
 
 export function AppointmentManager() {
-  const [appointments, setAppointments] = useState<Appointment[]>(mockAppointments)
-  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split("T")[0])
-  const [viewMode, setViewMode] = useState<"list" | "calendar">("list")
-  const [filterStatus, setFilterStatus] = useState<string>("all")
-  const [isBookingOpen, setIsBookingOpen] = useState(false)
-  const [editingAppointment, setEditingAppointment] = useState<Appointment | null>(null)
+  const [appointments, setAppointments] =
+    useState<Appointment[]>(mockAppointments);
+  const [selectedDate, setSelectedDate] = useState<string>(
+    new Date().toISOString().split("T")[0]
+  );
+  const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
+  const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [editingAppointment, setEditingAppointment] =
+    useState<Appointment | null>(null);
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "scheduled":
-        return "bg-blue-100 text-blue-800 border-blue-200"
+        return "bg-blue-100 text-blue-800 border-blue-200";
       case "confirmed":
-        return "bg-green-100 text-green-800 border-green-200"
+        return "bg-green-100 text-green-800 border-green-200";
       case "completed":
-        return "bg-gray-100 text-gray-800 border-gray-200"
+        return "bg-gray-100 text-gray-800 border-gray-200";
       case "cancelled":
-        return "bg-red-100 text-red-800 border-red-200"
+        return "bg-red-100 text-red-800 border-red-200";
       case "no-show":
-        return "bg-orange-100 text-orange-800 border-orange-200"
+        return "bg-orange-100 text-orange-800 border-orange-200";
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200"
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
-  }
+  };
 
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
       case "low":
-        return "bg-green-100 text-green-800"
+        return "bg-green-100 text-green-800";
       case "medium":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow-100 text-yellow-800";
       case "high":
-        return "bg-orange-100 text-orange-800"
+        return "bg-orange-100 text-orange-800";
       case "critical":
-        return "bg-red-100 text-red-800"
+        return "bg-red-100 text-red-800";
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 text-gray-800";
     }
-  }
+  };
 
   const getConsultationIcon = (mode: string) => {
     switch (mode) {
       case "video":
-        return <Video className="h-4 w-4" />
+        return <Video className="h-4 w-4" />;
       case "phone":
-        return <Phone className="h-4 w-4" />
+        return <Phone className="h-4 w-4" />;
       case "in-person":
-        return <MapPin className="h-4 w-4" />
+        return <MapPin className="h-4 w-4" />;
       default:
-        return <User className="h-4 w-4" />
+        return <User className="h-4 w-4" />;
     }
-  }
+  };
 
   const filteredAppointments = appointments.filter((appointment) => {
-    if (filterStatus !== "all" && appointment.status !== filterStatus) return false
-    if (viewMode === "calendar" && appointment.date !== selectedDate) return false
-    return true
-  })
+    if (filterStatus !== "all" && appointment.status !== filterStatus)
+      return false;
+    if (viewMode === "calendar" && appointment.date !== selectedDate)
+      return false;
+    return true;
+  });
 
-  const updateAppointmentStatus = (id: string, status: Appointment["status"]) => {
-    setAppointments((prev) => prev.map((apt) => (apt.id === id ? { ...apt, status } : apt)))
-  }
+  const updateAppointmentStatus = (
+    id: string,
+    status: Appointment["status"]
+  ) => {
+    setAppointments((prev) =>
+      prev.map((apt) => (apt.id === id ? { ...apt, status } : apt))
+    );
+  };
 
   const deleteAppointment = (id: string) => {
-    setAppointments((prev) => prev.filter((apt) => apt.id !== id))
-  }
+    setAppointments((prev) => prev.filter((apt) => apt.id !== id));
+  };
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -152,7 +190,9 @@ export function AppointmentManager() {
           <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
             Appointment Management
           </h1>
-          <p className="text-muted-foreground mt-1">Manage patient appointments and consultations</p>
+          <p className="text-muted-foreground mt-1">
+            Manage patient appointments and consultations
+          </p>
         </div>
 
         <Dialog open={isBookingOpen} onOpenChange={setIsBookingOpen}>
@@ -165,27 +205,34 @@ export function AppointmentManager() {
           <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle>Schedule New Appointment</DialogTitle>
-              <DialogDescription>Book a new appointment for a patient consultation</DialogDescription>
+              <DialogDescription>
+                Book a new appointment for a patient consultation
+              </DialogDescription>
             </DialogHeader>
             <AppointmentBookingForm
               onClose={() => setIsBookingOpen(false)}
               onSave={(appointment) => {
-                setAppointments((prev) => [...prev, { ...appointment, id: Date.now().toString() }])
-                setIsBookingOpen(false)
+                setAppointments((prev) => [
+                  ...prev,
+                  { ...appointment, id: Date.now().toString() },
+                ]);
+                setIsBookingOpen(false);
               }}
             />
           </DialogContent>
         </Dialog>
       </motion.div>
 
-      {/* Controls */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
         className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between"
       >
-        <Tabs value={viewMode} onValueChange={(value) => setViewMode(value as "list" | "calendar")}>
+        <Tabs
+          value={viewMode}
+          onValueChange={(value) => setViewMode(value as "list" | "calendar")}
+        >
           <TabsList>
             <TabsTrigger value="list">List View</TabsTrigger>
             <TabsTrigger value="calendar">Calendar View</TabsTrigger>
@@ -217,8 +264,12 @@ export function AppointmentManager() {
         </div>
       </motion.div>
 
-      {/* Appointments List */}
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="space-y-4">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+        className="space-y-4"
+      >
         <AnimatePresence>
           {filteredAppointments.map((appointment, index) => (
             <motion.div
@@ -253,8 +304,12 @@ export function AppointmentManager() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <Badge className={getUrgencyColor(appointment.urgency)}>{appointment.urgency}</Badge>
-                      <Badge className={getStatusColor(appointment.status)}>{appointment.status}</Badge>
+                      <Badge className={getUrgencyColor(appointment.urgency)}>
+                        {appointment.urgency}
+                      </Badge>
+                      <Badge className={getStatusColor(appointment.status)}>
+                        {appointment.status}
+                      </Badge>
                     </div>
                   </div>
                 </CardHeader>
@@ -262,13 +317,17 @@ export function AppointmentManager() {
                 <CardContent className="pt-0">
                   <div className="space-y-3">
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Symptoms:</p>
+                      <p className="text-sm font-medium text-muted-foreground">
+                        Symptoms:
+                      </p>
                       <p className="text-sm">{appointment.symptoms}</p>
                     </div>
 
                     {appointment.notes && (
                       <div>
-                        <p className="text-sm font-medium text-muted-foreground">Notes:</p>
+                        <p className="text-sm font-medium text-muted-foreground">
+                          Notes:
+                        </p>
                         <p className="text-sm">{appointment.notes}</p>
                       </div>
                     )}
@@ -286,7 +345,12 @@ export function AppointmentManager() {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => updateAppointmentStatus(appointment.id, "confirmed")}
+                            onClick={() =>
+                              updateAppointmentStatus(
+                                appointment.id,
+                                "confirmed"
+                              )
+                            }
                             className="text-green-600 border-green-200 hover:bg-green-50"
                           >
                             <CheckCircle className="h-4 w-4 mr-1" />
@@ -294,11 +358,17 @@ export function AppointmentManager() {
                           </Button>
                         )}
 
-                        {(appointment.status === "scheduled" || appointment.status === "confirmed") && (
+                        {(appointment.status === "scheduled" ||
+                          appointment.status === "confirmed") && (
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => updateAppointmentStatus(appointment.id, "completed")}
+                            onClick={() =>
+                              updateAppointmentStatus(
+                                appointment.id,
+                                "completed"
+                              )
+                            }
                             className="text-blue-600 border-blue-200 hover:bg-blue-50"
                           >
                             <CheckCircle className="h-4 w-4 mr-1" />
@@ -335,9 +405,15 @@ export function AppointmentManager() {
         </AnimatePresence>
 
         {filteredAppointments.length === 0 && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-12"
+          >
             <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-muted-foreground mb-2">No appointments found</h3>
+            <h3 className="text-lg font-medium text-muted-foreground mb-2">
+              No appointments found
+            </h3>
             <p className="text-sm text-muted-foreground">
               {filterStatus !== "all"
                 ? `No appointments with status "${filterStatus}"`
@@ -347,15 +423,15 @@ export function AppointmentManager() {
         )}
       </motion.div>
     </div>
-  )
+  );
 }
 
 function AppointmentBookingForm({
   onClose,
   onSave,
 }: {
-  onClose: () => void
-  onSave: (appointment: Omit<Appointment, "id">) => void
+  onClose: () => void;
+  onSave: (appointment: Omit<Appointment, "id">) => void;
 }) {
   const [formData, setFormData] = useState({
     patientName: "",
@@ -369,16 +445,16 @@ function AppointmentBookingForm({
     symptoms: "",
     notes: "",
     urgency: "medium" as Appointment["urgency"],
-  })
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     onSave({
       ...formData,
       status: "scheduled",
       createdAt: new Date().toISOString(),
-    })
-  }
+    });
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -388,7 +464,9 @@ function AppointmentBookingForm({
           <Input
             id="patientName"
             value={formData.patientName}
-            onChange={(e) => setFormData((prev) => ({ ...prev, patientName: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, patientName: e.target.value }))
+            }
             required
           />
         </div>
@@ -398,7 +476,9 @@ function AppointmentBookingForm({
             id="patientEmail"
             type="email"
             value={formData.patientEmail}
-            onChange={(e) => setFormData((prev) => ({ ...prev, patientEmail: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, patientEmail: e.target.value }))
+            }
             required
           />
         </div>
@@ -410,7 +490,9 @@ function AppointmentBookingForm({
           <Input
             id="patientPhone"
             value={formData.patientPhone}
-            onChange={(e) => setFormData((prev) => ({ ...prev, patientPhone: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, patientPhone: e.target.value }))
+            }
             required
           />
         </div>
@@ -419,7 +501,10 @@ function AppointmentBookingForm({
           <Select
             value={formData.appointmentType}
             onValueChange={(value) =>
-              setFormData((prev) => ({ ...prev, appointmentType: value as Appointment["appointmentType"] }))
+              setFormData((prev) => ({
+                ...prev,
+                appointmentType: value as Appointment["appointmentType"],
+              }))
             }
           >
             <SelectTrigger>
@@ -442,7 +527,9 @@ function AppointmentBookingForm({
             id="date"
             type="date"
             value={formData.date}
-            onChange={(e) => setFormData((prev) => ({ ...prev, date: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, date: e.target.value }))
+            }
             required
           />
         </div>
@@ -452,7 +539,9 @@ function AppointmentBookingForm({
             id="time"
             type="time"
             value={formData.time}
-            onChange={(e) => setFormData((prev) => ({ ...prev, time: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, time: e.target.value }))
+            }
             required
           />
         </div>
@@ -460,7 +549,12 @@ function AppointmentBookingForm({
           <Label htmlFor="duration">Duration (min)</Label>
           <Select
             value={formData.duration.toString()}
-            onValueChange={(value) => setFormData((prev) => ({ ...prev, duration: Number.parseInt(value) }))}
+            onValueChange={(value) =>
+              setFormData((prev) => ({
+                ...prev,
+                duration: Number.parseInt(value),
+              }))
+            }
           >
             <SelectTrigger>
               <SelectValue />
@@ -480,7 +574,9 @@ function AppointmentBookingForm({
         <Textarea
           id="symptoms"
           value={formData.symptoms}
-          onChange={(e) => setFormData((prev) => ({ ...prev, symptoms: e.target.value }))}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, symptoms: e.target.value }))
+          }
           placeholder="Describe the patient's symptoms..."
           required
         />
@@ -491,7 +587,9 @@ function AppointmentBookingForm({
         <Textarea
           id="notes"
           value={formData.notes}
-          onChange={(e) => setFormData((prev) => ({ ...prev, notes: e.target.value }))}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, notes: e.target.value }))
+          }
           placeholder="Any additional notes or observations..."
         />
       </div>
@@ -500,10 +598,13 @@ function AppointmentBookingForm({
         <Button type="button" variant="outline" onClick={onClose}>
           Cancel
         </Button>
-        <Button type="submit" className="bg-gradient-to-r from-emerald-600 to-teal-600">
+        <Button
+          type="submit"
+          className="bg-gradient-to-r from-emerald-600 to-teal-600"
+        >
           Schedule Appointment
         </Button>
       </div>
     </form>
-  )
+  );
 }
